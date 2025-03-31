@@ -665,3 +665,29 @@ The contents of third party dependencies in [/vendor](./vendor) folder are cover
 The contents of [/templating/fasttemplate](./templating/fasttemplate) are licensed under MIT License. See [LICENSE](./templating/fasttemplate/LICENSE) for more information.
 
 All other files are licensed under the Apache V2 License. See [LICENSE](LICENSE) for more information.
+
+## Troubleshooting
+```
+$ bazel build ...
+INFO: Repository local_config_cc instantiated at:
+  /DEFAULT.WORKSPACE.SUFFIX:520:13: in <toplevel>
+  /private/var/tmp/_bazel_tomsoir/ba085c64d1e4331691240591c886fe18/external/bazel_tools/tools/cpp/cc_configure.bzl:184:16: in cc_configure
+Repository rule cc_autoconf defined at:
+  /private/var/tmp/_bazel_tomsoir/ba085c64d1e4331691240591c886fe18/external/bazel_tools/tools/cpp/cc_configure.bzl:143:30: in <toplevel>
+ERROR: An error occurred during the fetch of repository 'local_config_cc':
+   Traceback (most recent call last):
+	File "/private/var/tmp/_bazel_tomsoir/ba085c64d1e4331691240591c886fe18/external/bazel_tools/tools/cpp/cc_configure.bzl", line 123, column 32, in cc_autoconf_impl
+		configure_osx_toolchain(repository_ctx, cpu_value, overriden_tools)
+	File "/private/var/tmp/_bazel_tomsoir/ba085c64d1e4331691240591c886fe18/external/bazel_tools/tools/cpp/osx_cc_configure.bzl", line 219, column 25, in configure_osx_toolchain
+		_compile_cc_file(
+	File "/private/var/tmp/_bazel_tomsoir/ba085c64d1e4331691240591c886fe18/external/bazel_tools/tools/cpp/osx_cc_configure.bzl", line 140, column 37, in _compile_cc_file
+		_compile_cc_file_single_arch(repository_ctx, src_name, out_name, timeout)
+	File "/private/var/tmp/_bazel_tomsoir/ba085c64d1e4331691240591c886fe18/external/bazel_tools/tools/cpp/osx_cc_configure.bzl", line 87, column 13, in _compile_cc_file_single_arch
+		fail(out_name + " failed to generate. Please file an issue at " +
+Error in fail: libtool_check_unique failed to generate. Please file an issue at https://github.com/bazelbuild/bazel/issues with the following:
+return code 1, stderr: /private/var/tmp/_bazel_tomsoir/ba085c64d1e4331691240591c886fe18/external/bazel_tools/tools/objc/libtool_check_unique.cc:15:10: fatal error: 'cstdlib' file not found
+   15 | #include <cstdlib>
+      |          ^~~~~~~~~
+```
+Error on Mac, To fix it, use the full Xcode toolchain:
+`$ sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer`
